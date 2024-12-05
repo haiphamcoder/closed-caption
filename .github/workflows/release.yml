@@ -1,0 +1,77 @@
+name: Release package to PyPI and GitHub
+
+on:
+  push:
+    tags:
+      - 'v*' # Kích hoạt workflow khi có tag bắt đầu với "v"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout mã nguồn
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Thiết lập Python
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
+    # 3. Cài đặt các gói cần thiết
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
+
+    # 4. Kiểm tra mã nguồn
+    - name: Run tests
+      run: |
+        python -m unittest discover tests
+
+    # 5. Đóng gói thư viện
+    - name: Build the package
+      run: |
+        python setup.py sdist bdist_wheel
+
+    # 6. Phát hành lên PyPI
+    - name: Publish to PyPI
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        twine upload dist/*
+
+    # 7. Tạo bản phát hành GitHub với tệp archive
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }} # Sử dụng tag hiện tại (vd: v1.0.0)
+        release_name: "Release ${{ github.ref_name }}"
+        draft: false
+        prerelease: false
+
+    # 8. Đính kèm file build vào bản phát hành
+    - name: Upload release assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./dist/closed_caption-*.tar.gz
+        asset_name: closed_caption-${{ github.ref_name }}.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload Wheel file
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./dist/closed_caption-*.whl
+        asset_name: closed_caption-${{ github.ref_name }}.whl
+        asset_content_type: application/octet-stream
