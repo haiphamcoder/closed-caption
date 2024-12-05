@@ -29,6 +29,7 @@ jobs:
     # 4. Kiểm tra mã nguồn
     - name: Run tests
       run: |
+        python -m pip install -r requirements-dev.txt
         python -m unittest discover tests
 
     # 5. Đóng gói thư viện
