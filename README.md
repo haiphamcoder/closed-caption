@@ -58,16 +58,6 @@ Tạo file phụ đề `.srt` không chứa thông tin thời gian:
 closed_caption video.mp4 output.srt --no-timing
 ```
 
-#### 3. Tạo và điều chỉnh thời gian
-
-Bạn có thể tạo phụ đề và điều chỉnh thời gian nếu thấy phụ đề không khớp:
-
-```bash
-closed_caption video.mp4 output.srt --adjust-timing 2.5
-```
-
-(Điều chỉnh tất cả các dòng phụ đề, tăng thêm 2.5 giây.)
-
 ### Sử dụng thư viện trong Python
 
 #### Tạo phụ đề có thời gian
