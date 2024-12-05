@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "closed-caption"
-version = "1.0.0"
+version = "1.0.1"
 description = "Tạo phụ đề từ video sử dụng OpenAI Whisper."
 readme = "README.md"
 keywords = ["subtitles", "speech-to-text", "video", "sync"]
