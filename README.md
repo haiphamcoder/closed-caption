@@ -105,6 +105,32 @@ Chúng tôi hoan nghênh mọi đóng góp để cải thiện thư viện. Hãy
 
 5. Mở Pull Request (PR) và mô tả thay đổi của bạn.
 
+### Hướng dẫn kiểm tra
+
+1. Chạy test:
+
+   ```bash
+   python -m unittest discover -s tests
+   ```
+
+2. Đóng gói thư viện:
+
+   ```bash
+   python setup.py sdist bdist_wheel
+   ```
+
+3. Cài đặt thư viện cục bộ:
+
+   ```bash
+   pip install .
+   ```
+
+4. Chạy thử CLI:
+
+   ```bash
+   closed_caption <path-video> <output-path-srt>
+   ```
+
 ## License
 
 Dự án này được phát hành theo giấy phép MIT. Xem chi tiết tại [LICENSE](./LICENSE).
